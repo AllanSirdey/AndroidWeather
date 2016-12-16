@@ -11,6 +11,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //ok commentaire ok
         // allan
+        // Fonctionnalité allan
         // fonctionnalité julien
+
+
+
     }
 }
