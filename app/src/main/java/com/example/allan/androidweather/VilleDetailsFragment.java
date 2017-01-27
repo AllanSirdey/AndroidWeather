@@ -1,11 +1,18 @@
 package com.example.allan.androidweather;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.InputStream;
 
 /**
  * Fragment class used to dislpay the contact details.
@@ -20,6 +27,7 @@ public class VilleDetailsFragment extends Fragment {
     public TextView mTemperatureMax;
     public TextView mTemperatureMin;
     public TextView mDescription;
+    public View v;
 
     public VilleDetailsFragment() {
     }
@@ -34,12 +42,15 @@ public class VilleDetailsFragment extends Fragment {
 
 
         View view = inflater.inflate(R.layout.fragment_ville_details, container, false);
+        v = view;
 
         mNom = (TextView) view.findViewById(R.id.ville_details_nom);
         mTemperatureActuel = (TextView) view.findViewById(R.id.ville_details_temp);
         mTemperatureMax = (TextView) view.findViewById(R.id.ville_details_tempMax);
         mTemperatureMin = (TextView) view.findViewById(R.id.ville_details_tempMin);
         mDescription = (TextView) view.findViewById(R.id.ville_details_description);
+
+
 
         return view;
     }
@@ -62,10 +73,14 @@ public class VilleDetailsFragment extends Fragment {
         Ville ville = ((MainActivity) getActivity()).getVilles().get(descriptionIndex);
 
         mNom.setText(ville.getNom());
-        mTemperatureActuel.setText(String.valueOf(ville.getMeteo().getTemperatureActuelle()));
-        mTemperatureMax.setText(String.valueOf(ville.getMeteo().getTemperatureMax()));
-        mTemperatureMin.setText(String.valueOf(ville.getMeteo().getTemparatureMinimum()));
+        mTemperatureActuel.setText(String.valueOf(ville.getMeteo().getTemperatureActuelle())+" °C");
+        mTemperatureMax.setText(String.valueOf(ville.getMeteo().getTemperatureMax())+" °C");
+        mTemperatureMin.setText(String.valueOf(ville.getMeteo().getTemparatureMinimum())+" °C");
         mDescription.setText(ville.getMeteo().getDescription());
+
+        String iconeCode =  ville.getMeteo().getIcone();
+        new DownloadImageTask((ImageView) v.findViewById(R.id.imageView)).execute("http://openweathermap.org/img/w/"+iconeCode+".png");
+
         mItemIdx = descriptionIndex;
     }
 
@@ -77,4 +92,5 @@ public class VilleDetailsFragment extends Fragment {
         outState.putInt(ITEM_INDEX, mItemIdx);
     }
 }
+
 

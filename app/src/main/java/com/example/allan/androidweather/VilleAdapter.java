@@ -89,7 +89,7 @@ public class VilleAdapter extends RecyclerView.Adapter<VilleAdapter.ViewHolder> 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.mName.setText(mDataset.get(position).getNom());
-        holder.mTemperature.setText(String.valueOf(mDataset.get(position).getMeteo().getTemperatureActuelle()));
+        holder.mTemperature.setText(String.valueOf(mDataset.get(position).getMeteo().getTemperatureActuelle())+" °C");
         String iconeCode =  mDataset.get(position).getMeteo().getIcone();
         new DownloadImageTask((ImageView) myView.findViewById(R.id.img)).execute("http://openweathermap.org/img/w/"+iconeCode+".png");
 
