@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">AndroidWeather</string>
-    <string name="action_reset">Refresh</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_reset">Reset</string>
     <string name="name">Name</string>
     <string name="temp">Current Temperature</string>
     <string name="tempMax">Maximum temperature</string>

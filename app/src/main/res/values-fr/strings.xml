@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AndroidWeather</string>
-    <string name="action_reset">Refresh</string>
+    <string name="action_refresh">Rafraichir</string>
+    <string name="action_reset">RAZ</string>
     <string name="name">Ville :</string>
     <string name="temp">Temperature actuelle :</string>
     <string name="tempMax">Temperature maximum :</string>

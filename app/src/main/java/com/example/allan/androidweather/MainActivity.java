@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -17,10 +18,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.mukesh.tinydb.TinyDB;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +34,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements VilleListener  {
 
     private List<Ville> mVilles = new ArrayList<>();
+    List<Object> list;
+    private TinyDB tinyDB;
     public final static String NOMVILLE = "com.example.allan.androidweather.nomVille";
     public final static String LONGITUDE = "com.example.allan.androidweather.longitude";
     public final static String LATITUDE = "com.example.allan.androidweather.latitude";
@@ -40,11 +48,17 @@ public class MainActivity extends AppCompatActivity implements VilleListener  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Ville angers;
-        Meteo meteo = new Meteo(10,10,10,10,10,"meteoAngers","10n");
-        angers = new Ville("angers",meteo);
-        mVilles.add(angers);
         setContentView(R.layout.activity_main);
+
+        tinyDB=new TinyDB(getApplicationContext());
+
+
+        // Pour la persistance des données
+        Gson gson = new Gson();
+        list = tinyDB.getListObject("ListeVille",Ville.class,gson);
+
+        for (Object o : list)
+            mVilles.add((Ville) o);
 
         Button boutonAjouter = (Button) findViewById(R.id.ajouterVille);
         boutonAjouter.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements VilleListener  {
             villeOnclick(0);
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -109,6 +124,23 @@ public class MainActivity extends AppCompatActivity implements VilleListener  {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_reset:
+                reset();
+                Toast.makeText(this, "Supprimé au prochain démarrage.", Toast.LENGTH_LONG).show();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void reset() {
+        tinyDB.remove("ListeVille");
+    }
+
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // On vérifie tout d'abord à quel intent on fait référence ici à l'aide de notre identifiant
         if (requestCode == 0) {
@@ -135,6 +167,14 @@ public class MainActivity extends AppCompatActivity implements VilleListener  {
                 Log.i("METEO", "Meteo: " + meteo.toString());
                 Ville ville = new Ville(data.getStringExtra(NOMVILLE),meteo);
                 mVilles.add(ville);
+                list.add((Object) ville);
+
+                List<Object> listeObject = new ArrayList<>();
+                for (Ville v : mVilles)
+                    listeObject.add((Object) v);
+
+                tinyDB.remove("ListeVille");
+                tinyDB.putListObject("ListeVille", (ArrayList<Object>) listeObject);
             }
         }
     }
