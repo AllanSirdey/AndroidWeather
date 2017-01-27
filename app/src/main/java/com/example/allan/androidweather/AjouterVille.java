@@ -51,6 +51,16 @@ public class AjouterVille extends AppCompatActivity {
 
         setContentView(R.layout.ajouter_ville);
 
+        Button map = (Button) findViewById(R.id.choisirMap);
+        map.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+
+                // LANCER ACTIVITER GOOGLEMAPS
+                Toast.makeText(getApplicationContext(), "Lancement de l'activité GOOGLEMAPS", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         Button ajouterVille = (Button) findViewById(R.id.ajouterVille);
         ajouterVille.setOnClickListener(new View.OnClickListener() {
 
@@ -59,9 +69,21 @@ public class AjouterVille extends AppCompatActivity {
                 nom = (EditText) findViewById(R.id.nom);
                 nomVille = nom.getText().toString();
                 result = new Intent();
-                startDownload();
 
-                result.putExtra(MainActivity.NOMVILLE, nomVille);
+                // EN COURS : Gestion du refresh
+                Boolean autoclick = result.getBooleanExtra("AUTOCLICK",false);
+                if(autoclick){
+                    nomVille = result.getStringExtra("NAMECITY");
+                    startDownload();
+                    result.putExtra(MainActivity.NOMVILLE, nomVille);
+                }
+                else
+                {
+                    startDownload();
+
+                    result.putExtra(MainActivity.NOMVILLE, nomVille);
+                }
+
                 /*setResult(RESULT_OK, result);
                 finish();*/
             }

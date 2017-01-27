@@ -26,6 +26,8 @@ public class MyAsyncTask extends AsyncTask<URL, Integer, String> {
         this.mActivity = new WeakReference<>(activity);
     }
 
+    public MyAsyncTask() {}
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();

@@ -128,7 +128,10 @@ public class MainActivity extends AppCompatActivity implements VilleListener  {
         switch (item.getItemId()){
             case R.id.action_reset:
                 reset();
-                Toast.makeText(this, "Supprimé au prochain démarrage.", Toast.LENGTH_LONG).show();
+                return true;
+
+            case R.id.action_refresh:
+                refresh();
                 return true;
         }
 
@@ -137,6 +140,20 @@ public class MainActivity extends AppCompatActivity implements VilleListener  {
 
     private void reset() {
         tinyDB.remove("ListeVille");
+        Toast.makeText(this, "Supprimé au prochain démarrage.", Toast.LENGTH_LONG).show();
+    }
+
+    private void refresh() {
+        for (Ville v : mVilles)
+        {
+            Intent intent = new Intent(MainActivity.this, AjouterVille.class);
+            intent.putExtra("AUTOCLICK", true);
+            intent.putExtra("NAMECITY", v.getNom());
+            startActivityForResult(intent, 0);
+        }
+
+        Toast.makeText(this, "Rechargement des données.", Toast.LENGTH_LONG).show();
+        // Architecture de repenser afin de pouvoir recharger les valeurs pour chaque ville.
     }
 
 
